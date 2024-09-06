@@ -53,7 +53,8 @@ public class MultipleRecipesLogic extends RecipeLogic {
             GTRecipe match = machine.getRecipeType().getLookup().findRecipe(machine);
             if (match == null) break;
             GTRecipe input = GTRecipeBuilder.ofRaw().buildRawRecipe();
-            Pair<GTRecipe, Integer> pair = GTRecipeModifiers.fastParallel(getMachine(), match, Integer.MAX_VALUE, false);
+            Pair<GTRecipe, Integer> pair = GTRecipeModifiers.accurateParallel(getMachine(),match,Integer.MAX_VALUE,false);
+            //Pair<GTRecipe, Integer> pair = GTRecipeModifiers.fastParallel(getMachine(), match, Integer.MAX_VALUE, false);
             input.inputs.putAll(pair.getFirst().inputs);
             input.handleRecipeIO(IO.IN, machine, getChanceCaches());
             eu += pair.getFirst().duration * RecipeHelper.getInputEUt(pair.getFirst());

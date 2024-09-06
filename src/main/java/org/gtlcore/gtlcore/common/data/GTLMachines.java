@@ -32,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.event.level.PistonEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.gtlcore.gtlcore.GTLCore;
 import org.gtlcore.gtlcore.api.machine.multiblock.GTLPartAbility;
@@ -282,6 +283,31 @@ public class GTLMachines {
     //////////////////////////////////////
     // ******* Multiblock *******//
     //////////////////////////////////////
+    public final static MultiblockMachineDefinition ADVANCED_ORE_PROCESSOR =
+            REGISTRATE.multiblock("advanced_ore_processor", MultipleRecipesMachine::new)
+                    .langValue("Advanced Ore Processor")
+                    .rotationState(RotationState.ALL)
+                    .recipeType(INTEGRATED_ORE_PROCESSOR)
+                    .appearanceBlock(() -> Blocks.DIRT)
+                    .pattern(definition -> FactoryBlockPattern.start()
+                            .aisle("XXX", "XXX", "XXX")
+                            .aisle("XXX", "XAX", "XXX")
+                            .aisle("XXX", "XSX", "XXX")
+                            .where('S', controller(blocks(definition.get())))
+                            .where('X',
+                                    blocks(Blocks.DIRT)
+                                            .or(Predicates.abilities(EXPORT_ITEMS))
+                                            .or(Predicates.abilities(IMPORT_FLUIDS))
+                                            .or(Predicates.abilities(INPUT_ENERGY))
+                                            .or(Predicates.abilities(INPUT_LASER))
+                                            .or(Predicates.abilities(IMPORT_ITEMS)))
+                            .where('A', air())
+                            .build())
+                    .workableCasingRenderer(new ResourceLocation("minecraft:block/dirt"),
+                            GTCEu.id("block/multiblock/gcym/large_extractor"))
+                    .compassSections(GTCompassSections.TIER[LV])
+                    .compassNodeSelf()
+                    .register();
     public final static MultiblockMachineDefinition ELECTRIC_IMPLOSION_COMPRESSOR = REGISTRATE
             .multiblock("electric_implosion_compressor", WorkableElectricMultiblockMachine::new)
             .langValue("Electric Implosion Compressor")
